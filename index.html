@@ -20,6 +20,15 @@
   body{margin:0;background:var(--paper);color:var(--ink-800);font-family:'Inter',sans-serif;}
   .wrap{max-width:1180px;margin:0 auto;padding:0 20px 70px;}
 
+  /* ===== HERO ===== */
+  .hero{background:linear-gradient(160deg,var(--ink-900) 0%,#0B1226 100%);color:#EDEFEA;padding:88px 24px 76px;text-align:center;}
+  .hero-inner{max-width:640px;margin:0 auto;}
+  .hero-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:18px;display:inline-block;}
+  .hero-headline{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,4vw,42px);line-height:1.22;margin:0 0 18px;color:#fff;}
+  .hero-sub{font-size:15px;line-height:1.65;color:#C7CCDA;margin:0 0 30px;}
+  .hero-scroll{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--gold-bright);text-decoration:none;border:1px solid rgba(216,172,76,.4);border-radius:24px;padding:9px 20px;display:inline-block;transition:background .15s ease;}
+  .hero-scroll:hover{background:rgba(216,172,76,.12);}
+
   /* ===== LETTERHEAD HEADER ===== */
   header.letterhead{
     background:var(--ink-900);
@@ -405,7 +414,15 @@
 </style>
 </head>
 <body>
-<header class="letterhead">
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">Reputation · Distinction</span>
+    <h1 class="hero-headline">Discover what your school is becoming known for.</h1>
+    <p class="hero-sub">Every school says it's excellent. This is the evidence-based version — what's actually distinctive about your students, not marketing.</p>
+    <a class="hero-scroll" href="#report">See the School Signature ↓</a>
+  </div>
+</section>
+<header class="letterhead" id="report">
   <div class="lh-inner">
     <div class="lh-left">
       <div class="crest">G</div>
