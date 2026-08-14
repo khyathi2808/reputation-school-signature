@@ -161,7 +161,8 @@
   .leg-line{width:16px;height:0;border-top:2px solid var(--gold);display:inline-block;}
   .leg-line.dash{border-top:2px dashed var(--slate);}
   .leg-swatch{width:12px;height:12px;background:var(--gold-bright);opacity:.35;border-radius:2px;display:inline-block;}
-  .radar-wrap{display:flex;justify-content:center;}
+  .radar-wrap{display:flex;justify-content:center;position:relative;}
+  .spoke-label{cursor:help;}
   .spoke-label{font-family:'IBM Plex Mono',monospace;font-size:10.5px;fill:var(--ink-800);text-anchor:middle;}
 
   /* ============ CARD 3A: PRIORITY LIST ============ */
@@ -553,7 +554,6 @@
 
 <section class="drona-hero drona-explainer">
   <div class="drona-explainer-inner">
-    <div class="drona-eyebrow">Reputation · Distinction</div>
     <h2>Every school says it's excellent — <em>this is the evidence, not the marketing.</em></h2>
     <p>What can you actually point to that's distinctive? This view surfaces the competencies moving fastest, and the three claims worth telling outside the school.</p>
     <a class="drona-scroll" href="#viz">See the School Signature ↓</a>
@@ -605,6 +605,7 @@
         <g id="marDots"></g>
         <g id="radarLabels"></g>
       </svg>
+      <div class="tooltip" id="radarTooltip"></div>
     </div>
   </div>
 
@@ -621,7 +622,7 @@
   </div>
 
 
-<footer>Sample data · Greenwood International School · March 2026 — Dronalytics School Pretotype</footer>
+<footer>Sample data · March 2026 — Dronalytics School Pretotype</footer>
 </div>
 
 <script>
@@ -702,6 +703,15 @@ labels.forEach((_,i) => {
 });
 
 // labels
+const radarTooltip = document.getElementById('radarTooltip');
+const radarLabelMeanings = {
+  "Core Knowledge": "Foundational facts and concepts — the base every other skill builds on.",
+  "Comprehension": "Understanding ideas well enough to explain them, not just recall them.",
+  "Practical Application": "Applying what's learned to solve real, unfamiliar problems.",
+  "Critical Thinking": "Evaluating evidence and questioning assumptions before accepting a conclusion.",
+  "Judgment & Reasoning": "Weighing evidence and making sound calls, not just following a rule.",
+  "Creativity & Innovation": "Generating original ideas and approaches, not repeating a known method."
+};
 const labelsGroup = document.getElementById('radarLabels');
 labels.forEach((txt,i) => {
   const p = pointFor(i,122);
@@ -721,6 +731,21 @@ labels.forEach((txt,i) => {
   } else {
     t.textContent = txt;
   }
+  t.addEventListener('mouseenter', () => {
+    radarTooltip.textContent = radarLabelMeanings[txt] || txt;
+    radarTooltip.style.maxWidth = '190px';
+    radarTooltip.style.whiteSpace = 'normal';
+    const rect = t.getBoundingClientRect();
+    const wrapRect = t.closest('.radar-wrap').getBoundingClientRect();
+    radarTooltip.style.left = (rect.left - wrapRect.left + rect.width/2) + 'px';
+    radarTooltip.style.top = (rect.top - wrapRect.top) + 'px';
+    radarTooltip.style.opacity = 1;
+  });
+  t.addEventListener('mouseleave', () => {
+    radarTooltip.style.opacity = 0;
+    radarTooltip.style.maxWidth = '';
+    radarTooltip.style.whiteSpace = '';
+  });
   labelsGroup.appendChild(t);
 });
 
@@ -955,13 +980,12 @@ function buildBrochureHtml(){
 
   return REPORT_TEMPLATE({
     reportName: "Monthly Signature Report",
-    eyebrowTag: "Reputation · Distinction",
     badgeText: `${insights.length} claims worth telling`,
     summaryEyebrow: "For the principal — plain-language summary",
     headline: `Every school says it's excellent — <em>this is the evidence, not the marketing.</em>`,
     subhead: "What can you actually point to that's distinctive? This view surfaces the competencies moving fastest, and the three claims worth telling outside the school.",
     calloutHtml: `Every one of the <strong>${labels.length} competencies</strong> the School Signature tracks grew between January and March — an average gain of <strong>${avgGrowth} points</strong>. <strong>${escapeHtml(labels[maxIdx])}</strong> grew the most, up ${growth[maxIdx]} points, while ${escapeHtml(labels[minIdx])} grew the least, up ${growth[minIdx]}. <strong>${escapeHtml(insights[0].title)}</strong> remains the strongest area outright.`,
-    screenshotEyebrow: "Reputation · Distinction",
+    screenshotEyebrow: "Live Screenshot",
     screenshotTitle: "How each competency moved, January to March",
     screenshotSub: "Same six axes as the School Signature chart — gold is where the school stands now.",
     screenshotBodyHtml: screenshotAxisHtml(),
@@ -986,7 +1010,7 @@ function buildBrochureHtml(){
     flaggedSub: "Ordered by how distinctive they are. Each one includes why it matters and what to do with it.",
     flaggedCardsHtml: insights.map(flagCardHtml).join(''),
     closingQuote: `${labels[maxIdx]} is growing fastest, and ${insights[0].title} remains the strongest claim — both are worth telling before another school gets there first.`,
-    footerText: "Sample data · Greenwood International School · March 2026 — Dronalytics School Pretotype"
+    footerText: "Sample data · March 2026 — Dronalytics School Pretotype"
   });
 }
 
